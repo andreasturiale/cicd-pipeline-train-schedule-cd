@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    triggers {
+        pollSCM('') // Enabling being build on Push
+    }
     stages {
         stage('Build') {
             steps {
@@ -7,7 +10,8 @@ pipeline {
                 sh './gradlew build --no-daemon'
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
-            stage('DeployToStaging') {
+        }
+        stage('DeployToStaging') {
             when {
                 branch 'master'
             }
